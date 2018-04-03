@@ -1,14 +1,17 @@
 # coding=utf-8
 import logging
 import os
+from concurrent.futures.thread import ThreadPoolExecutor
 
 import tornado.web
 from tornado.ioloop import IOLoop
 import alembic.config
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from urls import handlers
 from utils import cli
-from model import models
+from model.models import User
 import config
 
 logger = logging.getLogger(__name__)
@@ -20,18 +23,42 @@ def upgrade():
     alembic.config.main('upgrade head'.split(' '), 'alembic')
 
 
-class EdgeBlog(tornado.web.Application):
+@manager.command(description='Init Database Data')
+def deploy():
+    engine = create_engine(config.DB.engine_url)
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    
+    admin_info = dict(
+        username='admin',
+        nickname='管理员',
+        email='admin@example.com',
+        password = 'admin123'
+    )
+    admin = User(**admin_info)
+    session.add(admin)
+    session.commit()
+    session.close()
+    print('Create administrator user:', admin_info)
+
+
+class Application(tornado.web.Application):
     
     def __init__(self, **kwargs):
         kwargs.update(handlers=handlers)
-        super(EdgeBlog, self).__init__(**kwargs)
+        super(Application, self).__init__(**kwargs)
+        self.db_engine = create_engine(config.DB.engine_url, **config.DB.engine_settings)
+        self.db_pool = sessionmaker(bind=self.db_engine)
+        self.thread_pool = ThreadPoolExecutor(10)
+
 
 @manager.option('-p', '--port', type=int, default=8888)
 @manager.option('-H', '--host', default='0.0.0.0')
 def runserver(host, port):
-        app = EdgeBlog(**config.APP)
+        app = Application(**config.APP)
         app.listen(port, address=host)
         IOLoop.current().start()
+
 
 if __name__ == '__main__':
     manager.run()

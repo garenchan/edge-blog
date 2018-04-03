@@ -14,11 +14,13 @@ class Config(dict):
 
 ### Database Configuration ###
 DB = Config(
-    connection='mysql+pymysql://root:admin123@172.18.231.151:3306/edge_blog',
-    pool_recycle=3600,
-    pool_timeout=30,
-    pool_size=100,
-    max_overflow=10,
+    engine_url='mysql+pymysql://root:admin123@172.18.231.151:3306/edge_blog?charset=utf8',
+    engine_settings=Config(
+        pool_recycle=3600,
+        pool_timeout=30,
+        pool_size=100,
+        max_overflow=10
+    ),
 )
 
 ### Web App Configuration ###
@@ -27,5 +29,7 @@ CUR_DIR = os.path.dirname(__file__)
 APP = Config(
     template_path=os.path.join(CUR_DIR, 'templates'),
     static_path=os.path.join(CUR_DIR, 'static'),
+    login_url='/auth/login',
+    xsrf_cookies=True,
     debug=True,
 )
