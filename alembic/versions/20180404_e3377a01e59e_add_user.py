@@ -1,13 +1,13 @@
-"""Added users
+"""add_user
 
-Revision ID: dfa1368ab725
+Revision ID: e3377a01e59e
 Revises: 
-Create Date: 2018-04-03 18:18:01.019788
+Create Date: 2018-04-04 15:43:17.867179
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'dfa1368ab725'
+revision = 'e3377a01e59e'
 down_revision = None
 branch_labels = None
 depends_on = None

@@ -52,29 +52,12 @@ $(function() {
     });
     
     $('#login-confirm').click(function() {
-        if ($('.login-form').valid()) {
-            $.ajax({
-                type: "POST",
-                data: $('.login-form').serialize(),
-                success: function on_success(responseJson) {
-                    if (responseJson.success) {
-                        
-                    } else {
-                        
-                    }
-                },
-                error: function on_error(request, msg, e) {
-                    console.log(e);
-                }
-            });
-        }
+        login();
     });
 
     $('.login-form input').keypress(function (e) {
         if (e.which == 13) {
-            if ($('.login-form').validate().form()) {
-                $('.login-form').submit();
-            }
+            login();
             return false;
         }
     });
@@ -89,3 +72,22 @@ $(function() {
         $('.forget-form').hide();
     });
 });
+
+function login() {
+    if ($('.login-form').valid()) {
+        $.ajax({
+            type: "POST",
+            data: $('.login-form').serialize(),
+            success: function on_success(responseJson) {
+                if (responseJson.success) {
+                    $(location).attr('href', responseJson.redirect);
+                } else {
+                    console.log(responseJson.error);
+                }
+            },
+            error: function on_error(request, msg, e) {
+                console.log(e);
+            }
+        });
+    }
+}

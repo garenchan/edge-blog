@@ -30,6 +30,14 @@ APP = Config(
     template_path=os.path.join(CUR_DIR, 'templates'),
     static_path=os.path.join(CUR_DIR, 'static'),
     login_url='/auth/login',
+    cookie_secret='61oETzKXQAGaYdghdhgfhfhfg',
     xsrf_cookies=True,
     debug=True,
+)
+
+### Session Configuration ###
+SESSION = Config(
+    cookie_key='_XSESSION_',
+    expires=1,
+    max_age=3600,
 )

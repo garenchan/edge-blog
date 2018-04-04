@@ -1,5 +1,5 @@
 # coding=utf-8
-from utils.cli import CLI
+from contrib.cli import CLI
 
 cli = CLI('blog', version='1.0.0')
 

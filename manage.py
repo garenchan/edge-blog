@@ -10,9 +10,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from urls import handlers
-from utils import cli
-from model.models import User
-import config
+from contrib import cli
+from models.user import User
+from contrib.session.cookie import CookieSessionManager
+import configs
 
 logger = logging.getLogger(__name__)
 manager = cli.CLI(prog='EdgeBlog', version='1.0.0')
@@ -25,7 +26,7 @@ def upgrade():
 
 @manager.command(description='Init Database Data')
 def deploy():
-    engine = create_engine(config.DB.engine_url)
+    engine = create_engine(configs.DB.engine_url)
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     
@@ -47,15 +48,16 @@ class Application(tornado.web.Application):
     def __init__(self, **kwargs):
         kwargs.update(handlers=handlers)
         super(Application, self).__init__(**kwargs)
-        self.db_engine = create_engine(config.DB.engine_url, **config.DB.engine_settings)
+        self.db_engine = create_engine(configs.DB.engine_url, **configs.DB.engine_settings)
         self.db_pool = sessionmaker(bind=self.db_engine)
         self.thread_pool = ThreadPoolExecutor(10)
+        self.session_manager = CookieSessionManager(**configs.SESSION)
 
 
 @manager.option('-p', '--port', type=int, default=8888)
 @manager.option('-H', '--host', default='0.0.0.0')
 def runserver(host, port):
-        app = Application(**config.APP)
+        app = Application(**configs.APP)
         app.listen(port, address=host)
         IOLoop.current().start()
 

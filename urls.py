@@ -2,7 +2,7 @@
 from tornado.web import url
 
 from views.dashboard import DashboardView
-from views.auth import LoginHandler
+from views.auth import LoginHandler, LogoutHandler
 from views.error import NotFoundErrorHandler
 
 handlers = [
@@ -12,7 +12,7 @@ handlers = [
     
     # Auth
     url(r'/auth/login', LoginHandler, name='login'),
-    #url(r'/auth/logout', LogoutHandler, name='logout'),
+    url(r'/auth/logout', LogoutHandler, name='logout'),
     
     # Error
     (r".*", NotFoundErrorHandler),
