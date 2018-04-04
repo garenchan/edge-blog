@@ -39,5 +39,5 @@ APP = Config(
 SESSION = Config(
     cookie_key='_XSESSION_',
     expires=1,
-    max_age=3600,
+    max_age=86400,
 )

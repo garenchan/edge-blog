@@ -3,6 +3,7 @@ from hashlib import sha224
 
 from sqlalchemy import Column, String
 from sqlalchemy import or_
+from sqlalchemy.exc import IntegrityError
 
 from . import BASE, UUIDMixin, TimestampMixin
 from contrib.session import UserMixin
@@ -28,6 +29,24 @@ class User(BASE, UUIDMixin, TimestampMixin, UserMixin):
     def verify_password(self, password):
         return self.password_hash == sha224(password. \
             encode('utf-8')).hexdigest()
+
+    @staticmethod
+    def insert_default_user(db_session):
+        user_info = dict(
+            username='admin',
+            nickname='管理员',
+            email='admin@example.com',
+            password = 'admin123'
+        )
+        try:
+            user = User(**user_info)
+            db_session.add(user)
+            db_session.commit()
+        except IntegrityError:
+            db_session.rollback()
+            print('Default user already exists!')
+        else:
+            print('Insert default user: %s' % user_info)
 
     @staticmethod
     def get_user_by_username_email(db_session, username_or_email):
