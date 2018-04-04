@@ -12,16 +12,16 @@
         <ul class="dropdown-menu dropdown-menu-default">
             <li>
                 <a href="page_calendar.html">
-                <i class="icon-calendar"></i> 发表博文 </a>
+                <i class="icon-note"></i> 发表博文 </a>
             </li>
             <li>
-                <a href="page_calendar.html">
+                <a href="{{ reverse_url('logout') }}">
                 <i class="icon-calendar"></i> 管理博客 </a>
             </li>
             <li class="divider">
             </li>
             <li>
-                <a href="login.html">
+                <a href="{{ reverse_url('logout') }}">
                 <i class="icon-key"></i> 退出系统 </a>
             </li>
         </ul>
@@ -30,13 +30,13 @@
     <li class="dropdown dropdown-user dropdown-dark">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
         <span class="username username-hide-on-mobile">
-        访客1 </span>
+        访客 </span>
         <!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
         <img alt="" class="img-circle" src="{{ static_url('admin/img/avatar9.jpg') }}"/>
         </a>
         <ul class="dropdown-menu dropdown-menu-default">
             <li>
-                <a href="/auth/login">
+                <a href="{{ reverse_url('login') }}">
                 <i class="icon-key"></i> 登录系统 </a>
             </li>
             <li>

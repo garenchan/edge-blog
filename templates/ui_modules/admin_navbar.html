@@ -1,0 +1,59 @@
+<div class="page-sidebar-wrapper">
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+        <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+        <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+        <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+            <li id="dashboard" class="start">
+                <a href="/admin">
+                    <i class="icon-home"></i>
+                    <span class="title">我的首页</span>
+                </a>
+            </li>
+            <li id="blog_management">
+                <a href="javascript:;">
+                    <i class="icon-bar-chart"></i>
+                    <span class="title">博文管理</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="{{ reverse_url('post_blog') }}">发表博文</a>
+                    </li>
+                    <li>
+                        <a href="ui_buttons.html">管理博文</a>
+                    </li>
+                    <li>
+                        <a href="ui_icons.html">博文分类</a>
+                    </li>
+                </ul>
+            </li>
+            <li id="messageboard" class="start">
+                <a href="/admin">
+                    <i class="icon-notebook"></i>
+                    <span class="title">评论管理</span>
+                </a>
+            </li>
+            <li id="hotdoc" class="start">
+                <a href="/admin">
+                    <i class="icon-diamond"></i>
+                    <span class="title">热门文章</span>
+                    <span class="badge badge-danger">hot</span>
+                </a>
+            </li>
+            <li id="callboard" class="start">
+                <a href="/admin">
+                    <i class="icon-game-controller"></i>
+                    <span class="title">博客公告</span>
+                </a>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+</div>

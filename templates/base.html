@@ -29,6 +29,7 @@
         <link href="{{ static_url('global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url('global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url('global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ static_url('global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css"/>
         {% end %}
         
         {% block theme_styles %}
@@ -141,28 +142,12 @@
         <script src="{{ static_url('global/plugins/jquery.cokie.min.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('global/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
+        <script src="{{ static_url('global/plugins/bootstrap-toastr/toastr.min.js') }}"></script>
         <!-- END CORE PLUGINS -->
         <script src="{{ static_url('global/scripts/metronic.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('admin/scripts/layout.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('admin/scripts/demo.js') }}" type="text/javascript"></script>
-
-        <script>
-        $(function() {
-            Metronic.init(); // init metronic core components
-            Layout.init(); // init current layout
-            Demo.init(); // init demo features
-        });
-        function active_sidebar(menu, submenu){
-            $(".page-sidebar-menu li").removeClass('active open');
-            if (menu != null) {
-                $(".page-sidebar-menu " + menu).addClass('active open');
-            }
-            if (submenu != null) {
-                $(".page-sidebar-menu "+ menu + " " + submenu).addClass('active')
-            }
-        }
-        </script>
-
+        <script src="{{ static_url('blog/scripts/main.js') }}" type="text/javascript"></script>
         {% block extra_scripts %}
         {% end %}
     </body>

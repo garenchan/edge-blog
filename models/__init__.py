@@ -26,3 +26,7 @@ class TimestampMixin(object):
 # NOTE: When add a new model, we need to import here, or else alembic cannot
 #   aware of its existence
 from .user import User
+from .blog_source import BlogSource
+from .blog_class import BlogClass
+from .blog_subclass import BlogSubClass
+from .blog import Blog

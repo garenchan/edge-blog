@@ -47,7 +47,6 @@ $(function() {
         },
         submitHandler: function (form) {
             //form.submit();
-            
         }
     });
     
@@ -82,11 +81,11 @@ function login() {
                 if (responseJson.success) {
                     $(location).attr('href', responseJson.redirect);
                 } else {
-                    console.log(responseJson.error);
+                    toastr.error(responseJson.error, '');
                 }
             },
             error: function on_error(request, msg, e) {
-                console.log(e);
+                toastr.error('未知错误, 请稍后重试！', '');
             }
         });
     }

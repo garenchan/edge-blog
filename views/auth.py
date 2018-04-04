@@ -32,7 +32,7 @@ class LoginHandler(BaseHandler):
             yield self.login_user(user)
             self.write(dict(
                 success=True,
-                redirect='/',
+                redirect='/admin',
             ))
         else:
             self.write(dict(
