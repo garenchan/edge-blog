@@ -17,3 +17,21 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
     blogs = relationship('Blog', backref='subclass', 
         cascade='all, delete-orphan', lazy='dynamic')
 
+    @staticmethod
+    def get_blog_subclasses(db_session, **kwargs):
+        search = kwargs.pop('search', None)
+        offset = kwargs.pop('offset', None)
+        limit = kwargs.pop('limit', None)
+        
+        query = db_session.query(BlogSubClass)
+        if search is not None:
+            query = query.filter(BlogSubClass.name.contains(search))
+        
+        query = query.order_by(BlogSubClass.updated_at.desc())
+        if offset is not None:
+            query = query.offset(offset)
+        if limit is not None:
+            query = query.limit(limit)
+            
+        return query.all()
+

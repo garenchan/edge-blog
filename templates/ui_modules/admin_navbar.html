@@ -16,21 +16,21 @@
                     <span class="title">我的首页</span>
                 </a>
             </li>
-            <li id="blog_management">
+            <li id="blog-management">
                 <a href="javascript:;">
                     <i class="icon-bar-chart"></i>
                     <span class="title">博文管理</span>
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
-                    <li id="blog_post">
+                    <li id="blog-post">
                         <a href="{{ reverse_url('post_blog') }}">发表博文</a>
                     </li>
                     <li>
                         <a href="ui_buttons.html">管理博文</a>
                     </li>
-                    <li>
-                        <a href="ui_icons.html">博文分类</a>
+                    <li id="blog-class">
+                        <a href="{{ reverse_url('post_class') }}">博文分类</a>
                     </li>
                 </ul>
             </li>

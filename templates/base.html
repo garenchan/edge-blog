@@ -23,6 +23,7 @@
         
         {% block styles %}
         {% block global_styles %}
+        <link href="{{ static_url('global/plugins/pace/themes/pace-theme-flash.css') }}" rel="stylesheet" type="text/css"/>
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
         <link href="{{ static_url('global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ static_url('global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css">
@@ -119,7 +120,7 @@
 
         <div class="page-footer">
             <div class="page-footer-inner">
-                 2018 &copy; <a target="_blank" href="https://github.com/garenchan/edge_blog">edge_blog</a>
+                 @2018 <a target="_blank" href="https://github.com/garenchan/edge_blog">edge_blog</a> by garenchan
             </div>
             <div class="scroll-to-top">
                 <i class="icon-arrow-up"></i>
@@ -143,6 +144,7 @@
         <script src="{{ static_url('global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('global/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('global/plugins/bootstrap-toastr/toastr.min.js') }}"></script>
+        <script src="{{ static_url('global/plugins/pace/pace.min.js') }}" type="text/javascript"></script>
         <!-- END CORE PLUGINS -->
         <script src="{{ static_url('global/scripts/metronic.js') }}" type="text/javascript"></script>
         <script src="{{ static_url('admin/scripts/layout.js') }}" type="text/javascript"></script>

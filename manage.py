@@ -16,6 +16,7 @@ import configs
 
 from models.user import User
 from models.blog_source import BlogSource
+from models.blog_class import BlogClass
 
 logger = logging.getLogger(__name__)
 manager = cli.CLI(prog='EdgeBlog', version='1.0.0')
@@ -33,6 +34,7 @@ def deploy():
     session = DBSession()
     User.insert_default_user(session)
     BlogSource.insert_default_sources(session)
+    BlogClass.insert_default_classes(session)
     session.close()
 
 

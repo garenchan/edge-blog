@@ -18,3 +18,11 @@ class PostBlogHandler(BaseHandler):
     @authenticated
     def get(self):
         self.render('admin/post_blog.html')
+
+
+class BlogClassHandler(BaseHandler):
+    """Blog classification management"""
+
+    @authenticated
+    def get(self):
+        self.render('admin/blog_class.html') 
