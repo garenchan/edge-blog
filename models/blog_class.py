@@ -2,6 +2,7 @@
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
 
 from . import BASE, UUIDMixin, TimestampMixin
 
@@ -53,3 +54,20 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
             query = query.limit(limit)
             
         return query.all()
+
+    @staticmethod
+    def get_max_order(db_session):
+        max_order = db_session.query(func.max(BlogClass.order)).scalar()
+        if max_order is None:
+            max_order = BlogClass.order.default.arg - 1
+        return max_order
+
+    @staticmethod
+    def insert_blog_class(db_session, **kwargs):
+        name = kwargs.pop('name')
+        description = kwargs.pop('description', '')
+        blog_class = BlogClass(name=name, description=description)
+        blog_class.order = BlogClass.get_max_order(db_session) + 1
+        db_session.add(blog_class)
+        db_session.commit()
+        return blog_class

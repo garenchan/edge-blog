@@ -6,7 +6,7 @@ from views.auth import LoginHandler, LogoutHandler
 from views.error import NotFoundErrorHandler
 from views import admin
 
-from api.blog_classes import ListBlogClasses
+from api.blog_classes import BlogClassesAPI
 from api.blog_subclasses import ListBlogSubClasses
 
 handlers = [
@@ -24,7 +24,7 @@ handlers = [
     url(r'/admin/blog/class', admin.BlogClassHandler, name='post_class'),
     
     # API
-    url(r'/api/blog_classes', ListBlogClasses),
+    url(r'/api/blog_classes', BlogClassesAPI),
     url(r'/api/blog_subclasses', ListBlogSubClasses),
     
     # Error

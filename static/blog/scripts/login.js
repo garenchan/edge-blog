@@ -1,9 +1,9 @@
 $(function() {
     $.backstretch([
-        "/static/admin/pages/media/bg/1.jpg",
-        "/static/admin/pages/media/bg/2.jpg",
-        "/static/admin/pages/media/bg/3.jpg",
-        "/static/admin/pages/media/bg/4.jpg"
+        static_url("/admin/pages/media/bg/1.jpg"),
+        static_url("/admin/pages/media/bg/2.jpg"),
+        static_url("/admin/pages/media/bg/3.jpg"),
+        static_url("/admin/pages/media/bg/4.jpg")
         ], {
           fade: 1000,
           duration: 8000
@@ -20,9 +20,6 @@ $(function() {
             password: {
                 required: true
             },
-            remember: {
-                required: false
-            }
         },
         messages: {
             username: {

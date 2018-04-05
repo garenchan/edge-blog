@@ -28,3 +28,7 @@ function active_sidebar(menu, submenu){
         $(".page-sidebar-menu "+ menu + " " + submenu).addClass('active')
     }
 }
+
+function static_url(url) {
+    return STATIC_URL + url;
+}

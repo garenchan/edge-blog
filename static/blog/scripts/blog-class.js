@@ -1,5 +1,6 @@
 var blog_class_table = null;
 var blog_subclass_table = null;
+
 $(function() {
     active_sidebar("#blog-management", "#blog-class");
     $('.bs-select').selectpicker({
@@ -12,7 +13,7 @@ $(function() {
         "bProcessing": true,
         "sAjaxSource": "/api/blog_classes",
         "language": {
-           url: STATIC_URL + '/blog/i18n/jquery.dataTables.json'
+           url: static_url('/blog/i18n/jquery.dataTables.json')
         },
         "lengthMenu": [
             [10, 25, 50, 100],
@@ -21,7 +22,7 @@ $(function() {
         "pageLength": 10,
         "aoColumns": [
             {"mData": "name", "sWidth": "20%", "bSearchable": true, "bSortable": false, "mRender": function (data, type, row ){
-                return  '<span class="label label-success">' + data + '</span>';;
+                return  '<span class="label label-success">' + data + '</span>';
             }},
             {"mData": "subclasses", "sWidth": "30%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
                 return data;
@@ -47,7 +48,7 @@ $(function() {
         "bProcessing": true,
         "sAjaxSource": "/api/blog_subclasses",
         "language": {
-           url: STATIC_URL + '/blog/i18n/jquery.dataTables.json'
+           url: static_url('/blog/i18n/jquery.dataTables.json')
         },
         "lengthMenu": [
             [10, 25, 50, 100],
@@ -58,19 +59,18 @@ $(function() {
             {"mData": "name", "sWidth": "20%", "bSearchable": true, "bSortable": false, "mRender": function (data, type, row ){
                 return  '<span class="label label-success">' + data + '</span>';;
             }},
-            {"mData": "description", "sWidth": "30%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
+            {"mData": "description", "sWidth": "20%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
                 return data;
             }},
             {"mData": "cls", "sWidth": "20%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
                 return data;
             }},
-            {"mData": "protected", "sWidth": "10%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
+            {"mData": "protected", "sWidth": "20%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
                 if (data) {
-                    
+                    return '<span class="label label-success"> 公开 </span>';
                 } else {
-                    
+                    return '<span class="label label-danger"> 隐藏 </span>';
                 }
-                return data;
             }},
             {"mData": "blogs_num", "sWidth": "10%", "bSearchable": false, "bSortable": false, "mRender": function (data, type, row ){
                 return data;
@@ -96,4 +96,52 @@ $(function() {
             blog_subclass_table.fnDraw();
         }
     });
+    
+    $('#add-class-form').validate({
+        errorElement: 'span',
+        errorClass: 'help-block',
+        focusInvalid: false,
+        rules: {
+            name: {
+                required: true
+            },
+            description: {
+                required: true
+            },
+        },
+        messages: {
+            name: {
+                required: "请输入大类名称"
+            },
+            description: {
+                required: "请输入分类简介"
+            }
+        },
+        highlight: function (element) {
+            $(element)
+                .closest('.form-group').addClass('has-error');
+        },
+    });
+    
+    $("#confirm-add-class").click(function() {
+        add_blog_class();
+    });
 });
+
+function add_blog_class() {
+    if ($("#add-class-form").valid()) {
+        $("#add-class-dialog").modal('hide');
+        $.ajax({
+            url: "/api/blog_classes",
+            type: "POST",
+            data: $("#add-class-form").serialize(),
+            success: function on_success(responseJson) {
+                toastr.info('成功添加大类', '');
+                blog_class_table.fnDraw();
+            },
+            error: function on_error(request, msg, e) {
+                toastr.error('未知错误, 请稍后重试！', '');
+            }
+        });
+    }
+}

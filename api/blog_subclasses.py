@@ -50,7 +50,7 @@ HTTP/1.1 200 OK
         'id': 'd63271df8fc94e5fa82b7532f05f59a6',
         'name': 'MYSQL',
         'description': 'MYSQL存储引擎学习',
-        'class': '数据库',
+        'cls': '数据库',
         'blogs_num': 10,
         'protected': False
     },
@@ -58,7 +58,7 @@ HTTP/1.1 200 OK
         'id': '18a7fdf74c374ca88eadca692ac8ae43',
         'name': 'NGINX',
         'description': 'NGINX WEB服务器',
-        'class': '后端',
+        'cls': '后端',
         'blogs_num': 5,
         'protected': True
     }

@@ -8,7 +8,7 @@ from views import BaseHandler
 from models.blog_class import BlogClass
 
 
-class ListBlogClasses(BaseHandler):
+class BlogClassesAPI(BaseHandler):
 
     @gen.coroutine
     def _datatable_ajax_source(self):
@@ -41,23 +41,23 @@ class ListBlogClasses(BaseHandler):
     @gen.coroutine
     def get(self):
         """
-GET /api/blog_classes HTTP/1.1
+        GET /api/blog_classes HTTP/1.1
 
-HTTP/1.1 200 OK
-[
-    {
-        'id': 'd63271df8fc94e5fa82b7532f05f59a6',
-        'name': '数据库',
-        'description': '数据库知识',
-        'subclasses': [{}, {}],
-    },
-    {
-        'id': '18a7fdf74c374ca88eadca692ac8ae43',
-        'name': '前端',
-        'description': '前端知识',
-        'subclasses': [{}, {}],
-    }
-]
+        HTTP/1.1 200 OK
+        [
+            {
+                'id': 'd63271df8fc94e5fa82b7532f05f59a6',
+                'name': '数据库',
+                'description': '数据库知识',
+                'subclasses': [{}, {}],
+            },
+            {
+                'id': '18a7fdf74c374ca88eadca692ac8ae43',
+                'name': '前端',
+                'description': '前端知识',
+                'subclasses': [{}, {}],
+            }
+        ]
         """
         sEcho = self.get_argument('sEcho', None)
         if sEcho:
@@ -65,4 +65,45 @@ HTTP/1.1 200 OK
             response = yield self._datatable_ajax_source()
         else:
             response = {}
+        self.write(response)
+
+    @authenticated
+    @gen.coroutine
+    def post(self):
+        """ Create BlogClass
+        Request Example
+        {
+            "blog_class": {
+                "name": "Database",
+                "description": "Database related"  --> optional
+            }
+        }
+        Response Example
+        {
+            "blog_class": {
+                "id": "ab06aabd94724ba3ae78db79e79420dc",
+                "name": "Database",
+                "description": ""Database related",
+                "order": 5
+            }
+        }
+        """
+        name = self.get_argument('name')
+        description = self.get_argument('description')
+        # TODO: form validate here
+        kwargs = dict(
+            name=name,
+            description=description
+        )
+        blog_class = yield self.async_do(BlogClass.insert_blog_class,
+            self.db_session, **kwargs)
+        # return response
+        response = {
+            'blog_class': {
+                'id': blog_class.id,
+                'name': blog_class.name,
+                'description': blog_class.description,
+                'order': blog_class.order
+            }
+        }
         self.write(response)
