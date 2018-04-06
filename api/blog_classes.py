@@ -41,7 +41,7 @@ class BlogClassesAPI(BaseHandler):
     @authenticated
     @gen.coroutine
     def get(self):
-        """
+        """ List BlogClass
         GET /api/blog_classes HTTP/1.1
 
         HTTP/1.1 200 OK
@@ -64,9 +64,56 @@ class BlogClassesAPI(BaseHandler):
         if sEcho:
             # means datatables load data from ajax
             response = yield self._datatable_ajax_source()
+            return self.write(response)
+            
+        try:
+            search = self.get_argument('search', '')
+            offset = self.get_argument('offset', None)
+            if offset:
+                offset = int(offset)
+            limit = self.get_argument('limit', None)
+            if limit:
+                limit = int(limit)
+        except Exception as ex:
+            response = {
+                'error': {
+                    'status': 400,
+                    'message': 'params error',
+                    'code': None
+                }
+            }
+            # params error
+            self.set_status(400)
+            return self.write(response)
+        # query in database
+        try:
+            kwargs = dict(search=search, offset=offset, limit=limit)
+            _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
+                self.db_session, **kwargs)
+        except Exception as ex:
+            response = {
+                'error': {
+                    'status': 500,
+                    'message': 'internal server error',
+                    'code': None
+                }
+            }
+            self.set_status(500)
         else:
-            response = {}
-        self.write(response)
+            response = {
+                'blog_classes': []
+            }
+            for cls in _blog_classes:
+                response['blog_classes'].append(
+                    dict(
+                        id=cls.id,
+                        name=cls.name,
+                        description=cls.description,
+                        order=cls.order,
+                        subclasses=[sub.name for sub in cls.subclasses.all()]
+                    )
+                )
+            self.write(response)
 
     @authenticated
     @gen.coroutine
@@ -89,8 +136,8 @@ class BlogClassesAPI(BaseHandler):
             }
         }
         """
-        name = self.get_argument('name')
-        description = self.get_argument('description')
+        name = self.get_argument('name', None)
+        description = self.get_argument('description', '')
 
         try:
             # TODO: form validate here

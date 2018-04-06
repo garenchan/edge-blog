@@ -1,4 +1,6 @@
 # coding=utf-8
+import json
+
 from tornado.web import RequestHandler
 from tornado import gen
 
@@ -25,6 +27,24 @@ class BaseHandler(RequestHandler):
                 self.db_session, user_id)
             if user:
                 self.current_user = user
+
+    def get_json_argument(self, name, *args):
+        # TODO: We need to check whether the request's content-type is
+        # application/json and get the charset.
+        _json = getattr(self, '_json', None)
+        if _json is None:
+            body = self.request.body
+            if isinstance(body, bytes):
+                body = body.decode()
+            _json = self._json = json.loads(body)
+        try:
+            value = _json[name]
+        except KeyError:
+            if len(args) >= 1:
+                value = args[0]
+            else:
+                raise
+        return value
 
     @gen.coroutine
     def login_user(self, user):

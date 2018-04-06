@@ -35,3 +35,14 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
             
         return query.all()
 
+    @staticmethod
+    def insert_blog_subclass(db_session, **kwargs):
+        name = kwargs.pop('name')
+        class_id = kwargs.pop('class_id')
+        protected = kwargs.pop('protected', False)
+        description = kwargs.pop('description', '')
+        blog_subclass = BlogSubClass(name=name, description=description,
+            protected=protected, class_id=class_id)
+        db_session.add(blog_subclass)
+        db_session.commit()
+        return blog_subclass

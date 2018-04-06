@@ -2,6 +2,7 @@
 
 {% block extra_styles %}
 <link href="{{ static_url('global/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ static_url('global/plugins/select2/select2.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ static_url('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ static_url('global/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ static_url('global/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css"/>
@@ -112,17 +113,13 @@
     <div class="modal-body">
         <form id="add-class-form" role="form">
             {% raw xsrf_form_html() %}
-            <div class="form-body">
-                <div class="form-group">
-                    <label>大类名称</label>
-                    <input name="name" type="text" class="form-control" placeholder="请输入大类名称...">
-                </div>
+            <div class="form-group">
+                <label>大类名称</label>
+                <input name="name" type="text" class="form-control" placeholder="请输入大类名称...">
             </div>
-            <div class="form-body">
-                <div class="form-group">
-                    <label>分类简介</label>
-                    <textarea name="description" class="form-control" rows="3"  style="resize:none" placeholder="请输入分类简介..."></textarea>
-                </div>
+            <div class="form-group">
+                <label>分类简介</label>
+                <textarea name="description" class="form-control" rows="3"  style="resize:none" placeholder="请输入分类简介..."></textarea>
             </div>
         </form>
     </div>
@@ -138,35 +135,37 @@
         <h4 class="modal-title">添加小类</h4>
     </div>
     <div class="modal-body">
-        <form id="add-class-form" role="form">
+        <form id="add-subclass-form" role="form">
             {% raw xsrf_form_html() %}
-            <div class="form-body">
-                <div class="form-group">
-                    <label>小类名称</label>
-                    <input name="name" type="text" class="form-control" placeholder="请输入小类名称...">
-                </div>
+            <div class="form-group">
+                <label>小类名称</label>
+                <input id="add_subclass_name_input" name="name" type="text" class="form-control" placeholder="请输入小类名称...">
             </div>
-            <div class="form-body">
-                <div class="form-group">
-                    <label>分类简介</label>
-                    <textarea name="description" class="form-control" rows="3"  style="resize:none" placeholder="请输入分类简介..."></textarea>
-                </div>
+            <div class="form-group">
+                <label>所属大类</label>
+                <input id="add_subclass_class_select" name="class" class="form-control select2">
+            </div>
+            <div class="form-group">
+                <label>分类简介</label>
+                <textarea id="add_subclass_desc_input" name="description" class="form-control" rows="3"  style="resize:none" placeholder="请输入分类简介..."></textarea>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
-        <button id="confirm-add-class" type="button" class="btn green-haze">确认</button>
+        <button id="confirm-add-subclass" type="button" class="btn green-haze">确认</button>
     </div>
 </div>
 {% end %}
 
 {% block extra_scripts %}
 <script src="{{ static_url('global/plugins/bootstrap-select/bootstrap-select.min.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('global/plugins/select2/select2.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/datatables/media/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
-<script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+
 <script src="{{ static_url('blog/scripts/blog-class.js') }}" type="text/javascript"></script>
 {% end %}

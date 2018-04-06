@@ -7,7 +7,7 @@ from views.error import NotFoundErrorHandler
 from views import admin
 
 from api.blog_classes import BlogClassesAPI
-from api.blog_subclasses import ListBlogSubClasses
+from api.blog_subclasses import BlogSubClassesAPI
 
 handlers = [
     # App
@@ -25,7 +25,7 @@ handlers = [
     
     # API
     url(r'/api/blog_classes', BlogClassesAPI),
-    url(r'/api/blog_subclasses', ListBlogSubClasses),
+    url(r'/api/blog_subclasses', BlogSubClassesAPI),
     
     # Error
     (r".*", NotFoundErrorHandler),

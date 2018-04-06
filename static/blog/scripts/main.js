@@ -32,3 +32,17 @@ function active_sidebar(menu, submenu){
 function static_url(url) {
     return STATIC_URL + url;
 }
+
+function get_cookie(cookie_key) {
+    return $.cookie(cookie_key);
+}
+
+function xsrf_token() {
+    return get_cookie("_xsrf");
+}
+
+function xsrf_token_header() {
+    return {
+        "X-Xsrftoken": xsrf_token(),
+    }
+}
