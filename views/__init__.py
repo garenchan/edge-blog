@@ -29,6 +29,7 @@ class BaseHandler(RequestHandler):
                 self.current_user = user
 
     def get_json_argument(self, name, *args):
+        """Get json argument"""
         # TODO: We need to check whether the request's content-type is
         # application/json and get the charset.
         _json = getattr(self, '_json', None)
