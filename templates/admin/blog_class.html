@@ -47,7 +47,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="btn-group">
-                                                    <button id="add_class_btn" class="btn green" data-toggle="modal" href="#add-class-dialog">
+                                                    <button id="add_class_btn" class="btn green">
                                                     添加大类 <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
@@ -116,6 +116,34 @@
                 <div class="form-group">
                     <label>大类名称</label>
                     <input name="name" type="text" class="form-control" placeholder="请输入大类名称...">
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label>分类简介</label>
+                    <textarea name="description" class="form-control" rows="3"  style="resize:none" placeholder="请输入分类简介..."></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+        <button id="confirm-add-class" type="button" class="btn green-haze">确认</button>
+    </div>
+</div>
+
+<div id="add-subclass-dialog" class="modal fade" tabindex="-1" data-width="500">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">添加小类</h4>
+    </div>
+    <div class="modal-body">
+        <form id="add-class-form" role="form">
+            {% raw xsrf_form_html() %}
+            <div class="form-body">
+                <div class="form-group">
+                    <label>小类名称</label>
+                    <input name="name" type="text" class="form-control" placeholder="请输入小类名称...">
                 </div>
             </div>
             <div class="form-body">

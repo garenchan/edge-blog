@@ -3,6 +3,7 @@ import logging
 
 from tornado.web import authenticated
 from tornado import gen
+from sqlalchemy.exc import IntegrityError
 
 from views import BaseHandler
 from models.blog_class import BlogClass
@@ -90,20 +91,42 @@ class BlogClassesAPI(BaseHandler):
         """
         name = self.get_argument('name')
         description = self.get_argument('description')
-        # TODO: form validate here
-        kwargs = dict(
-            name=name,
-            description=description
-        )
-        blog_class = yield self.async_do(BlogClass.insert_blog_class,
-            self.db_session, **kwargs)
-        # return response
-        response = {
-            'blog_class': {
-                'id': blog_class.id,
-                'name': blog_class.name,
-                'description': blog_class.description,
-                'order': blog_class.order
+
+        try:
+            # TODO: form validate here
+            kwargs = dict(
+                name=name,
+                description=description
+            )
+            blog_class = yield self.async_do(BlogClass.insert_blog_class,
+                self.db_session, **kwargs)
+            # return response
+            response = {
+                'blog_class': {
+                    'id': blog_class.id,
+                    'name': blog_class.name,
+                    'description': blog_class.description,
+                    'order': blog_class.order
+                }
             }
-        }
-        self.write(response)
+            self.set_status(201)
+        except IntegrityError as ex:
+            response = {
+                'error': {
+                    'status': 400,
+                    'message': ex.orig.args[1],
+                    'code': ex.orig.args[0],
+                }
+            }
+            self.set_status(400)
+        except Exception as ex :
+            response = {
+                'error': {
+                    'status': 500,
+                    'message': str(ex),
+                    'code': None,
+                }
+            }
+            self.set_status(500)
+        finally:
+            self.write(response)

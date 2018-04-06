@@ -123,6 +123,15 @@ $(function() {
         },
     });
     
+    $("#add_class_btn").click(function() {
+        $("#add-class-form").validate().resetForm();
+        $("#add-class-dialog").modal("show");
+    });
+    
+    $("#add_subclass_btn").click(function() {
+        $("#add-subclass-dialog").modal("show");
+    });
+    
     $("#confirm-add-class").click(function() {
         add_blog_class();
     });
@@ -135,12 +144,13 @@ function add_blog_class() {
             url: "/api/blog_classes",
             type: "POST",
             data: $("#add-class-form").serialize(),
-            success: function on_success(responseJson) {
+            success: function (responseJson) {
                 toastr.info('成功添加大类', '');
                 blog_class_table.fnDraw();
             },
-            error: function on_error(request, msg, e) {
-                toastr.error('未知错误, 请稍后重试！', '');
+            error: function (request, status, error) {
+                var error = request.responseJSON.error;
+                toastr.error(error.message, error.code);
             }
         });
     }
