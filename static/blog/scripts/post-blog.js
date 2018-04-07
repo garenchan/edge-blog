@@ -1,6 +1,6 @@
 $(function() {
     active_sidebar("#blog-management", "#blog-post");
-    $("#post_blog_content_input").markdown({language: 'zh'});
+   $("#post_blog_content_input").markdown({language: 'zh'});
     $('#post-blog-form').validate({
         errorElement: 'span',
         errorClass: 'help-block',
@@ -13,6 +13,9 @@ $(function() {
                 required: true
             },
             title: {
+                required: true
+            },
+            summary: {
                 required: true
             },
             content: {
@@ -28,6 +31,9 @@ $(function() {
             },
             title: {
                 required: "请输入博文标题"
+            },
+            summary: {
+                required: "请输入博文摘要"
             },
             content: {
                 required: "请输入博文内容"
@@ -101,6 +107,31 @@ $(function() {
 
 function post_blog() {
     if ($("#post-blog-form").valid()) {
-        
+        $.ajax({
+            url: "/api/blogs",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            headers: xsrf_token_header(),
+            data: JSON.stringify({
+                    "blog": {
+                        "title": $("#post_blog_title_input").val(),
+                        "summary": $("#post_blog_summary_input").val(),
+                        "content": $("#post_blog_content_input").val(),
+                        "source_id": $("#post_blog_source_select").val(),
+                        "subclass_id": $("#post_blog_subclass_select").val()
+                    }
+            }),
+            success: function (responseJson) {
+                console.log(responseJson);
+                toastr.info("成功发表博文", "");
+                return false;
+            },
+            error: function (request, status, error) {
+                var error = request.responseJSON.error;
+                toastr.error(error.message, error.code);
+            }
+        });
     }
+    return false;
 }

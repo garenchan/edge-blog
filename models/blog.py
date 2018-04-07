@@ -16,3 +16,16 @@ class Blog(BASE, UUIDMixin, TimestampMixin):
         nullable=False)
     subclass_id = Column(String(32), ForeignKey('blog_subclasses.id'),
         nullable=False)
+
+    @staticmethod
+    def insert_blog(db_session, **kwargs):
+        title = kwargs.pop('title')
+        summary = kwargs.pop('summary', '')
+        content = kwargs.pop('content')
+        source_id = kwargs.pop('source_id')
+        subclass_id = kwargs.pop('subclass_id')
+        blog = Blog(title=title, summary=summary, content=content,
+            source_id=source_id, subclass_id=subclass_id)
+        db_session.add(blog)
+        db_session.commit()
+        return blog
