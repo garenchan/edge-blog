@@ -143,8 +143,31 @@
             </div>
             <div class="form-group">
                 <label>所属大类</label>
-                <input id="add_subclass_class_select" name="class" class="form-control select2">
+                <input id="add_subclass_class_select" name="class" class="form-control select2" placeholder="请选择所属大类...">
             </div>
+     
+            <div class="form-group">
+                <label>小类属性</label>
+                <div class="md-radio-inline">
+                    <div class="md-radio">
+                        <input type="radio" id="add_subclass_protected_radio1" name="protected" value="False" class="md-radiobtn" checked>
+                        <label for="add_subclass_protected_radio1">
+                        <span></span>
+                        <span class="check"></span>
+                        <span class="box"></span>
+                        公开 </label>
+                    </div>
+                    <div class="md-radio">
+                        <input type="radio" id="add_subclass_protected_radio2" name="protected" value="True" class="md-radiobtn">
+                        <label for="add_subclass_protected_radio2">
+                        <span></span>
+                        <span class="check"></span>
+                        <span class="box"></span>
+                        隐藏 </label>
+                    </div>
+                </div>
+            </div>
+     
             <div class="form-group">
                 <label>分类简介</label>
                 <textarea id="add_subclass_desc_input" name="description" class="form-control" rows="3"  style="resize:none" placeholder="请输入分类简介..."></textarea>
@@ -156,16 +179,42 @@
         <button id="confirm-add-subclass" type="button" class="btn green-haze">确认</button>
     </div>
 </div>
+
+<div id="delete-class-dialog" class="modal fade" tabindex="-1" data-width="500">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">删除大类</h4>
+    </div>
+    <div id="delete-class-dialog-prompt" class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+        <button id="confirm-delete-class" type="button" class="btn btn-danger">确认</button>
+    </div>
+</div>
+
+<div id="delete-subclass-dialog" class="modal fade" tabindex="-1" data-width="500">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">删除小类</h4>
+    </div>
+    <div id="delete-subclass-dialog-prompt" class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-default">取消</button>
+        <button id="confirm-delete-subclass" type="button" class="btn btn-danger">确认</button>
+    </div>
+</div>
 {% end %}
 
 {% block extra_scripts %}
 <script src="{{ static_url('global/plugins/bootstrap-select/bootstrap-select.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/select2/select2.min.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('blog/i18n/select2.zh-CN.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/datatables/media/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
-
 <script src="{{ static_url('blog/scripts/blog-class.js') }}" type="text/javascript"></script>
 {% end %}

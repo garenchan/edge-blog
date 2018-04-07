@@ -1,5 +1,3 @@
-var STATIC_URL = "/static";
-
 $(function() {
     Metronic.init(); // init metronic core components
     Layout.init(); // init current layout
@@ -23,12 +21,14 @@ function active_sidebar(menu, submenu){
     $(".page-sidebar-menu li").removeClass('active open');
     if (menu != null) {
         $(".page-sidebar-menu " + menu).addClass('active open');
+        $(".page-sidebar-menu " + menu + " .arrow").addClass('open');
     }
     if (submenu != null) {
         $(".page-sidebar-menu "+ menu + " " + submenu).addClass('active')
     }
 }
 
+var STATIC_URL = "/static";
 function static_url(url) {
     return STATIC_URL + url;
 }

@@ -5,11 +5,11 @@ from tornado.web import authenticated
 from tornado import gen
 from sqlalchemy.exc import IntegrityError
 
-from views import BaseHandler
+from . import APIHandler
 from models.blog_class import BlogClass
 
 
-class BlogClassesAPI(BaseHandler):
+class BlogClassesAPI(APIHandler):
 
     @gen.coroutine
     def _datatable_ajax_source(self):
@@ -18,14 +18,15 @@ class BlogClassesAPI(BaseHandler):
         limit = int(self.get_argument('iDisplayLength', '10'))
         search = self.get_argument('sSearch', '')
         
-        kwargs = dict(search=search, offset=offset, limit=limit)
-        _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
+        kwargs = dict(search=search, offset=offset, 
+                      limit=limit, return_total=True)
+        total, _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
             self.db_session, **kwargs)
         
         response = dict(
             sEcho=echo,
-            iTotalRecords=str(len(_blog_classes)),
-            iTotalDisplayRecords=str(len(_blog_classes)),
+            iTotalRecords=total,
+            iTotalDisplayRecords=total,
             aaData=[]
         )
         for _blog_class in _blog_classes:
@@ -40,25 +41,27 @@ class BlogClassesAPI(BaseHandler):
 
     @authenticated
     @gen.coroutine
-    def get(self):
+    def get(self, *args):
         """ List BlogClass
-        GET /api/blog_classes HTTP/1.1
+GET /api/blog_classes HTTP/1.1
 
-        HTTP/1.1 200 OK
-        [
-            {
-                'id': 'd63271df8fc94e5fa82b7532f05f59a6',
-                'name': '数据库',
-                'description': '数据库知识',
-                'subclasses': [{}, {}],
-            },
-            {
-                'id': '18a7fdf74c374ca88eadca692ac8ae43',
-                'name': '前端',
-                'description': '前端知识',
-                'subclasses': [{}, {}],
-            }
-        ]
+HTTP/1.1 200 OK
+{
+    'blog_classes': [
+        {
+            'id': 'd63271df8fc94e5fa82b7532f05f59a6',
+            'name': '数据库',
+            'description': '数据库知识',
+            'subclasses': [{}, {}],
+        },
+        {
+            'id': '18a7fdf74c374ca88eadca692ac8ae43',
+            'name': '前端',
+            'description': '前端知识',
+            'subclasses': [{}, {}],
+        }
+    ]
+}
         """
         sEcho = self.get_argument('sEcho', None)
         if sEcho:
@@ -177,3 +180,38 @@ class BlogClassesAPI(BaseHandler):
             self.set_status(500)
         finally:
             self.write(response)
+
+    @authenticated
+    @gen.coroutine
+    def delete(self, *args):
+        """delete blog class of specified id.
+DELETE /api/blog_classes/ab06aabd94724ba3ae78db79e79420dc HTTP/1.1
+
+Response Example
+There is no body content for the response of a successful DELETE request.
+        """
+        if not args:
+            response = self.make_error_response(400, 
+                'No blog class id is specified', None)
+            self.set_status(400)
+            return self.write(response)
+            
+        try:
+            _id = args[0]
+            _blog_class = yield self.async_do(
+                BlogClass.delete_blog_class, self.db_session, _id)
+        except Exception as ex:
+            response = self.make_error_response(500, str(ex), None)
+            self.set_status(500)
+        else:
+            if _blog_class is None:
+                # mean blog class not exists
+                response = self.make_error_response(404, 
+                    'Blog class of id %r not found' % _id, None)
+                self.set_status(404)
+            else:
+                response = None
+                self.set_status(204)
+        finally:
+            if response:
+                self.write(response)

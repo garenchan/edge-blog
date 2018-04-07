@@ -42,8 +42,10 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
         search = kwargs.pop('search', None)
         offset = kwargs.pop('offset', None)
         limit = kwargs.pop('limit', None)
+        return_total = kwargs.pop('return_total', False)
         
         query = db_session.query(BlogClass)
+        total = query.count()
         if search is not None:
             query = query.filter(BlogClass.name.contains(search))
         # NOTE: We always show blog_classes in ascending order of `order`
@@ -53,7 +55,21 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
         if limit is not None:
             query = query.limit(limit)
             
-        return query.all()
+        if return_total:
+            # return items' total and display items
+            return total, query.all()
+        else:
+            return query.all()
+
+    @staticmethod
+    def delete_blog_class(db_session, class_id):
+        """Delete blog class of specified ID"""
+        blog_class = db_session.query(BlogClass).filter(
+                BlogClass.id == class_id).first()
+        if blog_class:
+            db_session.delete(blog_class)
+            db_session.commit()
+        return blog_class
 
     @staticmethod
     def get_max_order(db_session):

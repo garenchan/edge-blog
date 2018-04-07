@@ -22,8 +22,10 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
         search = kwargs.pop('search', None)
         offset = kwargs.pop('offset', None)
         limit = kwargs.pop('limit', None)
+        return_total = kwargs.pop('return_total', False)
         
         query = db_session.query(BlogSubClass)
+        total = query.count()
         if search is not None:
             query = query.filter(BlogSubClass.name.contains(search))
         
@@ -33,7 +35,37 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
         if limit is not None:
             query = query.limit(limit)
             
-        return query.all()
+        if return_total:
+            # return items' total and display items
+            return total, query.all()
+        else:
+            return query.all()
+
+    @staticmethod
+    def get_blog_subclass(db_session, *args, **kwargs):
+        _id = args[0] if len(args) >= 1 else None
+        if _id is not None:
+            blog_subclass = db_session.query(BlogSubClass).filter(
+                BlogSubClass.id == _id).first()
+            return blog_subclass
+        
+        _name = kwargs.pop('name', None)
+        if _name is not None:
+            blog_subclass = db_session.query(BlogSubClass).filter(
+                BlogSubClass.name == _name).first()
+            return blog_subclass
+        
+        return None
+
+    @staticmethod
+    def delete_blog_subclass(db_session, subclass_id):
+        """Delete blog subclass of specified ID"""
+        blog_subclass = db_session.query(BlogSubClass).filter(
+                BlogSubClass.id == subclass_id).first()
+        if blog_subclass:
+            db_session.delete(blog_subclass)
+            db_session.commit()
+        return blog_subclass
 
     @staticmethod
     def insert_blog_subclass(db_session, **kwargs):
