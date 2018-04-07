@@ -40,7 +40,7 @@ class BlogSubClassesAPI(APIHandler):
         return response
 
     @gen.coroutine
-    def get_by_id(self, _id):
+    def get_subclass_by_id(self, _id):
         """get subclass info of specified id
 GET /api/blog_subclasses/ab06aabd94724ba3ae78db79e79420dc HTTP/1.1
 
@@ -57,19 +57,56 @@ Response Example
         """
         _blog_subclass = yield self.async_do(BlogSubClass.get_blog_subclass,
             self.db_session, _id)
-        response = {
-            'blog_subclass': {
-            }
-        }
+        response = { 'blog_subclass': {} }
         if _blog_subclass:
             response['blog_subclass'] = {
                 'id': _blog_subclass.id,
                 'name': _blog_subclass.name,
                 'description': _blog_subclass.description,
                 'protected': _blog_subclass.protected,
-                'cls': _blog_subclass.cls.name
+                'cls': _blog_subclass.cls.name,
+                'blogs_num': _blog_subclass.blogs.count()
             }
         return response
+
+    @gen.coroutine
+    def get_subclasses(self):
+        try:
+            search = self.get_argument('search', '')
+            offset = self.get_argument('offset', None)
+            if offset:
+                offset = int(offset)
+            limit = self.get_argument('limit', None)
+            if limit:
+                limit = int(limit)
+        except Exception as ex:
+            # params error
+            response = self.make_error_response(400, 'Params error', None)
+            self.set_status(400)
+            return response
+        # query in database
+        try:
+            kwargs = dict(search=search, offset=offset, limit=limit)
+            _blog_subclasses = yield self.async_do(
+                BlogSubClass.get_blog_subclasses, self.db_session, **kwargs)
+        except Exception as ex:
+            logging.exception('A error raise when get_blog_subclasses')
+            response = self.make_error_response(500,
+                'Internal server error', None)
+            self.set_status(500)
+        else:
+            response = { 'blog_subclasses': [] }
+            for _blog_subclass in _blog_subclasses:
+                response['blog_subclasses'].append(dict(
+                    id=_blog_subclass.id,
+                    name=_blog_subclass.name,
+                    description=_blog_subclass.description,
+                    protected=_blog_subclass.protected,
+                    cls=_blog_subclass.cls.name,
+                    blogs_num=_blog_subclass.blogs.count()
+                ))
+        finally:
+            return response
 
     @authenticated
     @gen.coroutine
@@ -100,15 +137,16 @@ HTTP/1.1 200 OK
         if args:
             # mean get subclass info of specified id
             _id = args[0]
-            response = yield self.get_by_id(_id)
+            response = yield self.get_subclass_by_id(_id)
             return self.write(response)
             
         sEcho = self.get_argument('sEcho', None)
         if sEcho:
             # means datatables load data from ajax
             response = yield self._datatable_ajax_source()
-        else:
-            response = {}
+            return self.write(response)
+        
+        response = yield self.get_subclasses()
         self.write(response)
 
     @authenticated

@@ -78,14 +78,8 @@ HTTP/1.1 200 OK
             if limit:
                 limit = int(limit)
         except Exception as ex:
-            response = {
-                'error': {
-                    'status': 400,
-                    'message': 'params error',
-                    'code': None
-                }
-            }
             # params error
+            response = self.make_error_response(400, 'Params error', None)
             self.set_status(400)
             return self.write(response)
         # query in database
@@ -94,28 +88,21 @@ HTTP/1.1 200 OK
             _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
                 self.db_session, **kwargs)
         except Exception as ex:
-            response = {
-                'error': {
-                    'status': 500,
-                    'message': 'internal server error',
-                    'code': None
-                }
-            }
+            logging.exception('A error raise when get_blog_classes')
+            response = self.make_error_response(500,
+                'Internal server error', None)
             self.set_status(500)
         else:
-            response = {
-                'blog_classes': []
-            }
+            response = { 'blog_classes': [] }
             for cls in _blog_classes:
-                response['blog_classes'].append(
-                    dict(
-                        id=cls.id,
-                        name=cls.name,
-                        description=cls.description,
-                        order=cls.order,
-                        subclasses=[sub.name for sub in cls.subclasses.all()]
-                    )
-                )
+                response['blog_classes'].append(dict(
+                    id=cls.id,
+                    name=cls.name,
+                    description=cls.description,
+                    order=cls.order,
+                    subclasses=[sub.name for sub in cls.subclasses.all()]
+                ))
+        finally:
             self.write(response)
 
     @authenticated
@@ -161,22 +148,11 @@ HTTP/1.1 200 OK
             }
             self.set_status(201)
         except IntegrityError as ex:
-            response = {
-                'error': {
-                    'status': 400,
-                    'message': ex.orig.args[1],
-                    'code': ex.orig.args[0],
-                }
-            }
+            response = self.make_error_response(400, ex.orig.args[1],
+                ex.orig.args[0])
             self.set_status(400)
         except Exception as ex :
-            response = {
-                'error': {
-                    'status': 500,
-                    'message': str(ex),
-                    'code': None,
-                }
-            }
+            response = self.make_error_response(500, str(ex), None)
             self.set_status(500)
         finally:
             self.write(response)

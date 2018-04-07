@@ -7,10 +7,6 @@ var selected_blog_subclass = null;
 
 $(function() {
     active_sidebar("#blog-management", "#blog-class");
-    $('.bs-select').selectpicker({
-        iconBase: 'fa',
-        tickIcon: 'fa-check'
-    });
     
     blog_class_table = $('#blog_class_table').dataTable({
         "bServerSide": true,

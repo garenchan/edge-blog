@@ -8,6 +8,8 @@ from views import admin
 
 from api.blog_classes import BlogClassesAPI
 from api.blog_subclasses import BlogSubClassesAPI
+from api.blog_sources import BlogSourcesAPI
+
 
 handlers = [
     # App
@@ -26,9 +28,10 @@ handlers = [
     # API
     url(r'/api/blog_classes[/]?', BlogClassesAPI),
     url(r'/api/blog_classes/([^/]*)', BlogClassesAPI),
-    
     url(r'/api/blog_subclasses[/]?', BlogSubClassesAPI),
     url(r'/api/blog_subclasses/([^/]*)', BlogSubClassesAPI),
+    url(r'/api/blog_sources[/]?', BlogSourcesAPI),
+    url(r'/api/blog_sources/([^/]*)', BlogSourcesAPI),
     
     # Error
     (r".*", NotFoundErrorHandler),

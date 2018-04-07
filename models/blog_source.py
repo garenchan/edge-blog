@@ -16,6 +16,29 @@ class BlogSource(BASE, UUIDMixin, TimestampMixin):
         cascade='all, delete-orphan', lazy='dynamic')
 
     @staticmethod
+    def get_blog_sources(db_session, **kwargs):
+        search = kwargs.pop('search', None)
+        offset = kwargs.pop('offset', None)
+        limit = kwargs.pop('limit', None)
+        return_total = kwargs.pop('return_total', False)
+        
+        query = db_session.query(BlogSource)
+        total = query.count()
+        if search is not None:
+            query = query.filter(BlogSource.name.contains(search))
+        query = query.order_by(BlogSource.updated_at.desc())
+        if offset is not None:
+            query = query.offset(offset)
+        if limit is not None:
+            query = query.limit(limit)
+            
+        if return_total:
+            # return items' total and display items
+            return total, query.all()
+        else:
+            return query.all()
+
+    @staticmethod
     def insert_default_sources(db_session):
         names = ['原创', '转载', '翻译']
         for name in names:
