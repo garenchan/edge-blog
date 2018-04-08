@@ -123,15 +123,17 @@ function post_blog() {
                     }
             }),
             success: function (responseJson) {
-                console.log(responseJson);
                 toastr.info("成功发表博文", "");
-                return false;
+                setTimeout("location.reload()", 3000);
             },
             error: function (request, status, error) {
                 var error = request.responseJSON.error;
-                toastr.error(error.message, error.code);
+                if (error) {
+                    toastr.error(error.message, error.code);
+                } else {
+                    toastr.error("未知错误, 请稍后重试！");
+                }
             }
         });
     }
-    return false;
 }

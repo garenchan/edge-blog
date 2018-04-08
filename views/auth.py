@@ -14,7 +14,7 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument('username')
         password = self.get_argument('password')
-        next_url = self.get_argument('next', '/')
+        next_url = self.get_argument('next', None)
         if not username or not password:
             self.write(dict(
                 success=False,
@@ -32,7 +32,7 @@ class LoginHandler(BaseHandler):
             yield self.login_user(user)
             self.write(dict(
                 success=True,
-                redirect='/admin',
+                redirect=(next_url or '/admin'),
             ))
         else:
             self.write(dict(
