@@ -1,10 +1,11 @@
 # coding=utf-8
 from tornado.web import url
 
-from views.dashboard import DashboardView
+from views.common import DashboardView
 from views.auth import LoginHandler, LogoutHandler
 from views.error import NotFoundErrorHandler
 from views import admin
+from views.test import TestHandler
 
 from api.blog_classes import BlogClassesAPI
 from api.blog_subclasses import BlogSubClassesAPI
@@ -25,6 +26,7 @@ handlers = [
     url(r'/admin/?', admin.AdminDashboardHandler, name='admin'),
     url(r'/admin/blog/post', admin.PostBlogHandler, name='post_blog'),
     url(r'/admin/blog/class', admin.BlogClassHandler, name='post_class'),
+    url(r'/admin/blogs/manage', admin.ManageBlogsHandler, name='manage_blogs'),
     
     # API
     url(r'/api/blog_classes[/]?', BlogClassesAPI),
@@ -37,5 +39,7 @@ handlers = [
     url(r'/api/blogs/([^/]*)', BlogsAPI),
     
     # Error
-    (r".*", NotFoundErrorHandler),
+    (r'/test', TestHandler),
+    (r'.*', NotFoundErrorHandler),
+    
 ]

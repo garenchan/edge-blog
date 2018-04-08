@@ -1,6 +1,6 @@
 $(function() {
     active_sidebar("#blog-management", "#blog-post");
-   $("#post_blog_content_input").markdown({language: 'zh'});
+    $("#post_blog_content_input").markdown({language: 'zh'});
     $('#post-blog-form').validate({
         errorElement: 'span',
         errorClass: 'help-block',

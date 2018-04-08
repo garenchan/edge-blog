@@ -25,7 +25,8 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
         return_total = kwargs.pop('return_total', False)
         
         query = db_session.query(BlogSubClass)
-        total = query.count()
+        if return_total:
+            total = query.count()
         if search is not None:
             query = query.filter(BlogSubClass.name.contains(search))
         

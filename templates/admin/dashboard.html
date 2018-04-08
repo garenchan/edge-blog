@@ -1,11 +1,7 @@
-{% extends '../base.html' %}
+{% extends 'layout.html' %}
 
 {% block page_header %}
-    {% module Template("ui_modules/page_header.html", page_title="我的首页", page_title_second="") %}
-{% end %}
-
-{% block navbar %}
-    {% module Template("ui_modules/admin_navbar.html") %}
+    {% module Header("我的首页", "") %}
 {% end %}
 
 {% block content %}

@@ -1,0 +1,102 @@
+{% extends '../base.html' %}
+
+{% block title %}
+    爱谁谁的博客
+{% end %}
+
+{% block body %}
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
+    <div class="page-header navbar navbar-fixed-top">
+        <div class="page-header-inner">
+            <!-- logo begin -->
+            <div class="page-logo">
+                <a href="/">
+                    <img src="{{ static_url('admin/img/logo-light.png') }}" alt="logo" class="logo-default"/>
+                    </a>
+                <div class="menu-toggler sidebar-toggler">
+                </div>
+            </div>
+            
+            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"></a>
+            
+            {% block page_actions %}
+                {% module Actions() %}
+            {% end %}
+            
+            <div class="page-top">
+                <form class="search-form" action="#" method="GET">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="搜索..." name="query">
+                        <span class="input-group-btn">
+                        <a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
+                        </span>
+                    </div>
+                </form>
+                <div class="top-menu">
+                    {% block top_menu %}
+                        {% module TopMenu() %}
+                    {% end %}
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+    <div class="clearfix">
+    </div>
+    
+    <div class="page-container">
+        <!-- BEGIN SIDEBAR -->
+        {% block navbar %}
+            {% module Navbar(blog_classes) %}
+        {% end %}
+        
+        <div class="page-content-wrapper">
+            <div class="page-content">
+                {% block page_header %}
+                <!-- PAGE HEADER -->
+                {% end %}
+                
+                {% block content %}
+                <!-- PAGE CONTENT-->
+                {% end %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="page-footer">
+        <div class="page-footer-inner">
+             @2018 <a target="_blank" href="https://github.com/garenchan/edge-blog">edge-blog</a> by garenchan
+        </div>
+        <div class="scroll-to-top">
+            <i class="icon-arrow-up"></i>
+        </div>
+    </div>
+    <!--[if lt IE 9]>
+    <script src="{{ static_url('global/plugins/respond.min.js') }}"></script>
+    <script src="{{ static_url('global/plugins/excanvas.min.js') }}"></script> 
+    <![endif]-->
+    <script src="{{ static_url('global/plugins/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/jquery-migrate.min.js') }}" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="{{ static_url('global/plugins/jquery-ui/jquery-ui.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}"></script>
+    <script src="{{ static_url('global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/jquery.cokie.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('global/plugins/bootstrap-toastr/toastr.min.js') }}"></script>
+    <script src="{{ static_url('global/plugins/pace/pace.min.js') }}" type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <script src="{{ static_url('global/scripts/metronic.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('admin/scripts/layout.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('admin/scripts/demo.js') }}" type="text/javascript"></script>
+    <script src="{{ static_url('blog/scripts/main.js') }}" type="text/javascript"></script>
+    {% block extra_scripts %}
+        <!-- extra scripts -->
+    {% end %}
+</body>
+{% end %}

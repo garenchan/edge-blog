@@ -1,0 +1,31 @@
+<div class="page-sidebar-wrapper">
+    <div class="page-sidebar navbar-collapse collapse">
+        <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+            <li id="dashboard" class="start">
+                <a href="/">
+                    <i class="icon-home"></i>
+                    <span class="title">博客首页</span>
+                </a>
+            </li>
+            {% for blog_class in blog_classes %}
+            <li>
+                <a href="javascript:;">
+                    <i class="icon-basket"></i>
+                    <span class="title">{{ blog_class.name }}</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                {% for blog_subclass in blog_class.subclasses %}
+                    <li>
+                        <a href="{{ blog_subclass.id }}">
+                            <i class="icon-home"></i>
+                            {{ blog_subclass.name }}
+                        </a>
+                    </li>
+                {% end %}
+                </ul>
+            </li>
+            {% end %}
+        </ul>
+    </div>
+</div>

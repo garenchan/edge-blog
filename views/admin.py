@@ -25,4 +25,12 @@ class BlogClassHandler(BaseHandler):
 
     @authenticated
     def get(self):
-        self.render('admin/blog_class.html') 
+        self.render('admin/blog_class.html')
+
+
+class ManageBlogsHandler(BaseHandler):
+    """Manage posted blogs"""
+    
+    @authenticated
+    def get(self):
+        self.render('admin/manage_blogs.html')

@@ -1,6 +1,9 @@
 # coding=utf-8
 import os
 
+import uimodules
+
+
 class Config(dict):
 
     def __init__(self, **kwargs):
@@ -32,6 +35,7 @@ APP = Config(
     login_url='/auth/login',
     cookie_secret='61oETzKXQAGaYdghdhgfhfhfg',
     xsrf_cookies=True,
+    ui_modules=uimodules,
     debug=True,
 )
 

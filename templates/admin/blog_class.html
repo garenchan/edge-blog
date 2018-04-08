@@ -1,4 +1,4 @@
-{% extends '../base.html' %}
+{% extends 'layout.html' %}
 
 {% block extra_styles %}
 <link href="{{ static_url('global/plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
@@ -14,11 +14,7 @@
 {% end %}
 
 {% block page_header %}
-    {% module Template("ui_modules/page_header.html", page_title="博文分类", page_title_second="") %}
-{% end %}
-
-{% block navbar %}
-    {% module Template("ui_modules/admin_navbar.html") %}
+    {% module Header("博文分类", "") %}
 {% end %}
 
 {% block content %}
@@ -214,7 +210,7 @@
 <script src="{{ static_url('global/plugins/datatables/media/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}" type="text/javascript"></script>
-<script src="{{ static_url('global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('global/plugins/bootstrap-modal/js/bootstrap-modal.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
 <script src="{{ static_url('blog/scripts/blog-class.js') }}" type="text/javascript"></script>
 {% end %}
