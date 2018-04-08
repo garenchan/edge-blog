@@ -18,8 +18,8 @@ DB = Config(
     engine_settings=Config(
         pool_recycle=3600,
         pool_timeout=30,
-        pool_size=100,
-        max_overflow=10
+        pool_size=30,
+        max_overflow=20
     ),
 )
 

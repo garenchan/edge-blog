@@ -45,7 +45,7 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(**kwargs)
         self.db_engine = create_engine(configs.DB.engine_url, **configs.DB.engine_settings)
         self.db_pool = sessionmaker(bind=self.db_engine, autocommit=False)
-        self.thread_pool = ThreadPoolExecutor(10)
+        self.thread_pool = ThreadPoolExecutor(50)
         self.session_manager = CookieSessionManager(**configs.SESSION)
 
 

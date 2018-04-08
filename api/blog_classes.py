@@ -39,7 +39,7 @@ class BlogClassesAPI(APIHandler):
             ))
         return response
 
-    @authenticated
+    #@authenticated
     @gen.coroutine
     def get(self, *args):
         """ List BlogClass
