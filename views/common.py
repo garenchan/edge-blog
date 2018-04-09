@@ -3,12 +3,54 @@ from tornado.web import RequestHandler
 from tornado import gen
 
 from . import BaseHandler
-from models.blog_class import BlogClass
+from models import BlogClass, BlogSubClass
 
-class DashboardView(BaseHandler):
+
+class CommonBaseHandler(BaseHandler):
+
+    @gen.coroutine
+    def get_blog_classes(self):
+        _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
+            self.db_session, lazy=False)
+        
+        for _blog_class in _blog_classes[:]:
+            for _blog_subclass in _blog_class.subclasses[:]:
+                if _blog_subclass.protected:
+                    _blog_class.subclasses.remove(_blog_subclass)
+            if len(_blog_class.subclasses) == 0:
+                _blog_classes.remove(_blog_class)
+        return _blog_classes
+
+    @gen.coroutine
+    def prepare(self):
+        yield super().prepare()
+        self.blog_classes = yield self.get_blog_classes()
+
+    def get_template_namespace(self):
+        """
+        NOTE: In the common pages, we need to genarate dynamic navbar,
+        so we need to pass blog_classes variable repeatedly when render template!
+        This is very inconvenient, we add it into template namespace and use it
+        directly.
+        """
+        namespace = super().get_template_namespace()
+        namespace['blog_classes'] = self.blog_classes
+        return namespace
+
+
+class DashboardView(CommonBaseHandler):
 
     @gen.coroutine
     def get(self):
-        blog_classes = yield self.async_do(BlogClass.get_blog_classes, self.db_session, joined=True)
-        blog_classes = [i for i in blog_classes if len(i.subclasses) > 0]
-        self.render('common/dashboard.html', blog_classes=blog_classes)
+        self.render('common/dashboard.html')
+
+
+class BlogSubClassIndexView(CommonBaseHandler):
+
+    @gen.coroutine
+    def get(self, subclass_id):
+        blog_subclass = yield self.async_do(BlogSubClass.get_blog_subclass, self.db_session, subclass_id)
+        if not blog_subclass:
+            self.write_error(404)
+        else:
+            self.render('common/blog_subclass_index.html', subclass_name=blog_subclass.name)

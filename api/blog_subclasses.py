@@ -18,7 +18,7 @@ class BlogSubClassesAPI(APIHandler):
         search = self.get_argument('sSearch', '')
         
         kwargs = dict(search=search, offset=offset, 
-                      limit=limit, return_total=True)
+                      limit=limit, return_total=True, lazy=False)
         total, _blog_subclasses = yield self.async_do(
             BlogSubClass.get_blog_subclasses, self.db_session, **kwargs)
         
@@ -35,7 +35,7 @@ class BlogSubClassesAPI(APIHandler):
                 description=_blog_subclass.description,
                 protected=_blog_subclass.protected,
                 cls=_blog_subclass.cls.name,
-                blogs_num=_blog_subclass.blogs.count()
+                blogs_num=len(_blog_subclass.blogs)
             ))
         return response
 
@@ -56,7 +56,7 @@ Response Example
 }
         """
         _blog_subclass = yield self.async_do(BlogSubClass.get_blog_subclass,
-            self.db_session, _id)
+            self.db_session, _id, lazy=False)
         response = { 'blog_subclass': {} }
         if _blog_subclass:
             response['blog_subclass'] = {
@@ -65,7 +65,7 @@ Response Example
                 'description': _blog_subclass.description,
                 'protected': _blog_subclass.protected,
                 'cls': _blog_subclass.cls.name,
-                'blogs_num': _blog_subclass.blogs.count()
+                'blogs_num': len(_blog_subclass.blogs)
             }
         return response
 
@@ -86,7 +86,7 @@ Response Example
             return response
         # query in database
         try:
-            kwargs = dict(search=search, offset=offset, limit=limit)
+            kwargs = dict(search=search, offset=offset, limit=limit, lazy=False)
             _blog_subclasses = yield self.async_do(
                 BlogSubClass.get_blog_subclasses, self.db_session, **kwargs)
         except Exception as ex:
@@ -103,7 +103,7 @@ Response Example
                     description=_blog_subclass.description,
                     protected=_blog_subclass.protected,
                     cls=_blog_subclass.cls.name,
-                    blogs_num=_blog_subclass.blogs.count()
+                    blogs_num=len(_blog_subclass.blogs)
                 ))
         finally:
             return response

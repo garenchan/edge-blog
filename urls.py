@@ -1,7 +1,7 @@
 # coding=utf-8
 from tornado.web import url
 
-from views.common import DashboardView
+from views.common import DashboardView, BlogSubClassIndexView
 from views.auth import LoginHandler, LogoutHandler
 from views.error import NotFoundErrorHandler
 from views import admin
@@ -14,9 +14,10 @@ from api.blogs import BlogsAPI
 
 
 handlers = [
-    # App
+    # Common
     url(r'/', DashboardView, name='main'),
     url(r'/dashboard', DashboardView, name='dashboard'),
+    url(r'/subclass/(?P<subclass_id>[^/]*)', BlogSubClassIndexView, name='subclass_index'),
     
     # Auth
     url(r'/auth/login', LoginHandler, name='login'),

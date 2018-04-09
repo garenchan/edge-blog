@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block page_header %}
+    {% module Header(subclass_name, "") %}
+{% end %}
+
+{% block content %}
+just test
+{% end %}
+
+{% block extra_scripts %}
+<script src="{{ static_url('blog/scripts/subclass-index.js') }}" type="text/javascript"></script>
+{% end %}

@@ -8,7 +8,7 @@
                 </a>
             </li>
             {% for blog_class in blog_classes %}
-            <li>
+            <li id="class_{{ blog_class.id }}">
                 <a href="javascript:;">
                     <i class="icon-wallet"></i>
                     <span class="title">{{ blog_class.name }}</span>
@@ -16,8 +16,8 @@
                 </a>
                 <ul class="sub-menu">
                 {% for blog_subclass in blog_class.subclasses %}
-                    <li>
-                        <a href="{{ blog_subclass.id }}">
+                    <li id="subclass_{{ blog_subclass.id }}">
+                        <a href="{{ reverse_url('subclass_index', blog_subclass.id) }}">
                             {{ blog_subclass.name }}
                         </a>
                     </li>
