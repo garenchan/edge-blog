@@ -14,9 +14,8 @@ from contrib import cli
 from contrib.session.cookie import CookieSessionManager
 import configs
 
-from models.user import User
-from models.blog_source import BlogSource
-from models.blog_class import BlogClass
+from models import User, BlogSource, BlogClass
+
 
 logger = logging.getLogger(__name__)
 manager = cli.CLI(prog='EdgeBlog', version='1.0.0')
@@ -36,6 +35,28 @@ def deploy():
     BlogSource.insert_default_sources(session)
     BlogClass.insert_default_classes(session)
     session.close()
+
+
+@manager.command(description='Use for debugging')
+def shell():
+    import models
+    _engine = create_engine(configs.DB.engine_url)
+    _sessionmaker = sessionmaker(bind=_engine, autocommit=False)
+    
+    try:
+        import IPython
+    except ImportError:
+        import code
+        
+        vars = globals()
+        vars.update(locals())
+        vars.update(dict(
+            _engine=_engine,
+            _sessionmaker=_sessionmaker,
+        ))
+        code.interact(local=vars)
+    else:
+        IPython.embed()
 
 
 class Application(tornado.web.Application):

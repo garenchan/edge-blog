@@ -10,7 +10,7 @@
             {% for blog_class in blog_classes %}
             <li>
                 <a href="javascript:;">
-                    <i class="icon-basket"></i>
+                    <i class="icon-wallet"></i>
                     <span class="title">{{ blog_class.name }}</span>
                     <span class="arrow "></span>
                 </a>
@@ -18,7 +18,6 @@
                 {% for blog_subclass in blog_class.subclasses %}
                     <li>
                         <a href="{{ blog_subclass.id }}">
-                            <i class="icon-home"></i>
                             {{ blog_subclass.name }}
                         </a>
                     </li>

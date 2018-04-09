@@ -5,6 +5,7 @@ from tornado.web import RequestHandler
 from tornado import gen
 
 from models.user import User
+from models.blog_class import BlogClass
 
 
 class BaseHandler(RequestHandler):
@@ -66,3 +67,14 @@ class BaseHandler(RequestHandler):
             self.db_session.close()
         if self.session_remove_flag:
             yield self.session.remove()
+
+    @gen.coroutine
+    def get_blog_classes(self):
+        _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
+            self.db_session)
+        
+        blog_classes = []
+        for _blog_class in _blog_classes:
+            if _blog_class.subclasses.count() <= 0:
+                continue
+            

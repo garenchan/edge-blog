@@ -1,6 +1,6 @@
 # coding=utf-8
 from sqlalchemy import Column, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref, joinedload
 
 from . import BASE, UUIDMixin, TimestampMixin
 
@@ -14,8 +14,10 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
     protected = Column(Boolean, default=False)
     
     class_id = Column(String(32), ForeignKey('blog_classes.id'), nullable=False)
-    blogs = relationship('Blog', backref='subclass', 
-        cascade='all, delete-orphan', lazy='dynamic')
+    # support lazy, joined, dynamic relationship loading
+    blogs = relationship('Blog', backref=backref('subclass', lazy='joined'), 
+        cascade='all, delete-orphan')
+    blog_query = relationship('Blog', lazy='dynamic')
 
     @staticmethod
     def get_blog_subclasses(db_session, **kwargs):
@@ -23,6 +25,7 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
         offset = kwargs.pop('offset', None)
         limit = kwargs.pop('limit', None)
         return_total = kwargs.pop('return_total', False)
+        lazy = kwargs.pop('lazy', True)
         
         query = db_session.query(BlogSubClass)
         if return_total:
@@ -35,6 +38,8 @@ class BlogSubClass(BASE, UUIDMixin, TimestampMixin):
             query = query.offset(offset)
         if limit is not None:
             query = query.limit(limit)
+        if not lazy:
+            query = query.options(joinedload(BlogSubClass.blogs))
             
         if return_total:
             # return items' total and display items

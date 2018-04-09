@@ -1,6 +1,6 @@
 # coding=utf-8
 from sqlalchemy import Column, String, Integer
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, joinedload, backref
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 
@@ -16,8 +16,11 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
     # The smaller `order` value is, the more it is ahead
     order = Column(Integer, default=1, nullable=False)
     
-    subclasses = relationship('BlogSubClass', backref='cls', 
-        cascade='all, delete-orphan', lazy='dynamic')
+    subclasses = relationship('BlogSubClass',
+        backref=backref('cls', lazy='joined'), 
+        cascade='all, delete-orphan'
+    )
+    subclass_query = relationship('BlogSubClass', lazy='dynamic')
 
     @staticmethod
     def insert_default_classes(db_session):
@@ -43,6 +46,7 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
         offset = kwargs.pop('offset', None)
         limit = kwargs.pop('limit', None)
         return_total = kwargs.pop('return_total', False)
+        lazy = kwargs.pop('lazy', True)
         
         query = db_session.query(BlogClass)
         total = query.count()
@@ -54,6 +58,8 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
             query = query.offset(offset)
         if limit is not None:
             query = query.limit(limit)
+        if not lazy:
+            query = query.options(joinedload(BlogClass.subclasses))
             
         if return_total:
             # return items' total and display items

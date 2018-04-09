@@ -19,7 +19,7 @@ class BlogClassesAPI(APIHandler):
         search = self.get_argument('sSearch', '')
         
         kwargs = dict(search=search, offset=offset, 
-                      limit=limit, return_total=True)
+                      limit=limit, return_total=True, lazy=False)
         total, _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
             self.db_session, **kwargs)
         
@@ -35,7 +35,7 @@ class BlogClassesAPI(APIHandler):
                 name=_blog_class.name,
                 description=_blog_class.description,
                 order=_blog_class.order,
-                subclasses=[sub.name for sub in _blog_class.subclasses.all()]
+                subclasses=[sub.name for sub in _blog_class.subclasses]
             ))
         return response
 
@@ -84,7 +84,8 @@ HTTP/1.1 200 OK
             return self.write(response)
         # query in database
         try:
-            kwargs = dict(search=search, offset=offset, limit=limit)
+            kwargs = dict(search=search, offset=offset, limit=limit,
+                lazy=False)
             _blog_classes = yield self.async_do(BlogClass.get_blog_classes, 
                 self.db_session, **kwargs)
         except Exception as ex:
@@ -100,7 +101,7 @@ HTTP/1.1 200 OK
                     name=cls.name,
                     description=cls.description,
                     order=cls.order,
-                    subclasses=[sub.name for sub in cls.subclasses.all()]
+                    subclasses=[sub.name for sub in cls.subclasses]
                 ))
         finally:
             self.write(response)

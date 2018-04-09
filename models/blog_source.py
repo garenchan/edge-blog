@@ -1,6 +1,6 @@
 # coding=utf-8
 from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref, joinedload
 from sqlalchemy.exc import IntegrityError
 
 from . import BASE, UUIDMixin, TimestampMixin
@@ -11,9 +11,10 @@ class BlogSource(BASE, UUIDMixin, TimestampMixin):
     __tablename__ = 'blog_sources'
     
     name = Column(String(50), unique=True, nullable=True)
-    
-    blogs = relationship('Blog', backref='source', 
-        cascade='all, delete-orphan', lazy='dynamic')
+    # support lazy, joined, dynamic relationship loading
+    blogs = relationship('Blog', backref=backref('source', lazy='joined'), 
+        cascade='all, delete-orphan')
+    blog_query = relationship('Blog', lazy='dynamic')
 
     @staticmethod
     def get_blog_sources(db_session, **kwargs):
@@ -21,6 +22,7 @@ class BlogSource(BASE, UUIDMixin, TimestampMixin):
         offset = kwargs.pop('offset', None)
         limit = kwargs.pop('limit', None)
         return_total = kwargs.pop('return_total', False)
+        lazy = kwargs.pop('lazy', True)
         
         query = db_session.query(BlogSource)
         total = query.count()
@@ -31,6 +33,8 @@ class BlogSource(BASE, UUIDMixin, TimestampMixin):
             query = query.offset(offset)
         if limit is not None:
             query = query.limit(limit)
+        if not lazy:
+            query = query.options(joinedload(BlogSource.blogs))
             
         if return_total:
             # return items' total and display items
