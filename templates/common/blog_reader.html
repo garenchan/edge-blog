@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block page_header %}
+    {% module Header(blog.title, blog.subclass.name) %}
+{% end %}
+
+{% block content %}
+{{ blog.content }}
+{% end %}
+
+{% block extra_scripts %}
+
+{% end %}

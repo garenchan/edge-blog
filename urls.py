@@ -1,7 +1,7 @@
 # coding=utf-8
 from tornado.web import url
 
-from views.common import DashboardView, BlogSubClassIndexView
+from views.common import DashboardView, BlogSubClassIndexView, BlogReaderView
 from views.auth import LoginHandler, LogoutHandler
 from views.error import NotFoundErrorHandler
 from views import admin
@@ -17,7 +17,9 @@ handlers = [
     # Common
     url(r'/', DashboardView, name='main'),
     url(r'/dashboard', DashboardView, name='dashboard'),
-    url(r'/subclass/(?P<subclass_id>[^/]*)', BlogSubClassIndexView, name='subclass_index'),
+    url(r'/subclass/(?P<subclass_id>[^/]*)/(?P<page_id>[^/]*)', 
+        BlogSubClassIndexView, name='subclass_index'),
+    url(r'/blog/(?P<blog_id>[^/]*)', BlogReaderView, name='blog_reader'),
     
     # Auth
     url(r'/auth/login', LoginHandler, name='login'),

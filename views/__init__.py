@@ -64,6 +64,7 @@ class BaseHandler(RequestHandler):
     @gen.coroutine
     def on_finish(self):
         if self.db_session:
+            # yield self.async_do(self.db_session.close)
             self.db_session.close()
         if self.session_remove_flag:
             yield self.session.remove()

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # coding=utf-8
 import logging
 import os
@@ -5,7 +6,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 
 import tornado.web
 from tornado.ioloop import IOLoop
-import alembic.config
+from alembic import config as alembic_config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -23,7 +24,7 @@ manager = cli.CLI(prog='EdgeBlog', version='1.0.0')
 
 @manager.command(description='Upgrade Database')
 def upgrade():
-    alembic.config.main('upgrade head'.split(' '), 'alembic')
+    alembic_config.main('upgrade head'.split(' '), 'alembic')
 
 
 @manager.command(description='Init Database Data')
@@ -48,13 +49,13 @@ def shell():
     except ImportError:
         import code
         
-        vars = globals()
-        vars.update(locals())
-        vars.update(dict(
-            _engine=_engine,
-            _sessionmaker=_sessionmaker,
-        ))
-        code.interact(local=vars)
+        variables = globals()
+        variables.update(locals())
+        variables.update(
+            dict(_engine=_engine,
+                _sessionmaker=_sessionmaker)
+        )
+        code.interact(local=variables)
     else:
         IPython.embed()
 

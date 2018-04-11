@@ -17,7 +17,7 @@
                 <ul class="sub-menu">
                 {% for blog_subclass in blog_class.subclasses %}
                     <li id="subclass_{{ blog_subclass.id }}">
-                        <a href="{{ reverse_url('subclass_index', blog_subclass.id) }}">
+                        <a href="{{ reverse_url('subclass_index', blog_subclass.id, '1') }}">
                             {{ blog_subclass.name }}
                         </a>
                     </li>

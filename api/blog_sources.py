@@ -29,7 +29,7 @@ class BlogSourcesAPI(APIHandler):
             return self.write(response)
         # query in database
         try:
-            kwargs = dict(search=search, offset=offset, limit=limit)
+            kwargs = dict(search=search, offset=offset, limit=limit, lazy=False)
             _blog_sources = yield self.async_do(BlogSource.get_blog_sources, 
                 self.db_session, **kwargs)
         except Exception as ex:
@@ -43,7 +43,7 @@ class BlogSourcesAPI(APIHandler):
                 response['blog_sources'].append(dict(
                     id=_blog_source.id,
                     name=_blog_source.name,
-                    blog_num=_blog_source.blogs.count()
+                    blog_num=len(_blog_source.blogs)
                 ))
         finally:
             self.write(response)

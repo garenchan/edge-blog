@@ -12,7 +12,6 @@
 {% end %}
 
 {% block content %}
-<div class="col-md-9 blog-page">
 <div class="portlet light">
     <div class="portlet-body">
         <div class="row">
@@ -46,7 +45,7 @@
                             </div>
                             <div class="col-md-8 blog-article">
                                 <h3>
-                                    <a href="{{ reverse_url('blog_reader', blog.id) }}">
+                                    <a href="page_blog_item.html">
                                     {{ blog.title }} </a>
                                 </h3>
                                 <p>
@@ -59,10 +58,12 @@
                         </div>
                         <hr>
                         {% end %}
-                        {% if not len(blogs) %}
-                            Oops, 这个分类下还没有博文被发表喔！
-                        {% end %}
                     </div>
+                    <!--end col-md-9-->
+                    <div class="col-md-3 col-sm-4 blog-sidebar">
+                        {% module NoticeBoard() %}
+                    </div>
+                    <!--end col-md-3-->
                 </div>
                 <ul class="pagination pull-right">
                     <li>
@@ -87,12 +88,6 @@
         </div>
     </div>
 </div>
-</div>
-
-<div class="col-md-3 col-sm-4 blog-sidebar">
-                        {% module NoticeBoard() %}
-                    </div>
-
 {% end %}
 
 {% block extra_scripts %}
