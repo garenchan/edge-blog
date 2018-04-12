@@ -1,13 +1,72 @@
 {% extends 'layout.html' %}
 
+{% block extra_styles %}
+<link href="{{ static_url('admin/pages/css/blog.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ static_url('admin/pages/css/news.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ static_url('admin/pages/css/profile.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ static_url('admin/pages/css/tasks.css') }}" rel="stylesheet" type="text/css"/>
+<link  href="{{ static_url('blog/css/highlight/highlight.min.css') }}" rel="stylesheet" type="text/css">
+<style type="text/css">
+    .blog-page {
+        padding-right: 10px; 
+        padding-left: 0px;
+    }
+    .blog-content {
+        font-size: 15px;
+    }
+</style>
+{% end %}
+
 {% block page_header %}
     {% module Header(blog.title, blog.subclass.name) %}
 {% end %}
 
 {% block content %}
-{{ blog.content }}
+<input type="hidden" id="subclass-id" value="{{ blog.subclass.id }}">
+<div class="col-md-9 blog-page">
+    <div class="portlet light">
+        <div class="portlet-body">
+            <div class="blog-tag-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-inline blog-tags">
+                            <li>
+                                <i class="fa fa-tags"></i>
+                                <a href="javascript:;">{{ blog.source.name }} </a>
+                                <a href="javascript:;">{{ blog.subclass.name }} </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 blog-tag-data-inner">
+                        <ul class="list-inline">
+                            <li>
+                                <i class="fa fa-calendar"></i>
+                                <a href="javascript:;">{{ blog.updated_at }} </a>
+                            </li>
+                            <li>
+                                <i class="fa fa-comments"></i>
+                                <a href="javascript:;">{{ blog.view_counter }} 阅读 </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-content">
+                {{ blog.content }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3 col-sm-4 blog-sidebar">
+    {% module NoticeBoard() %}
+</div>
+
 {% end %}
 
 {% block extra_scripts %}
-
+<script src="{{ static_url('global/plugins/bootstrap-markdown/js/bootstrap-markdown.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('global/plugins/bootstrap-markdown/lib/markdown.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('blog/scripts/highlight/highlight.min.js') }}" type="text/javascript"></script>
+<script src="{{ static_url('blog/scripts/blog-reader.js') }}" type="text/javascript"></script>
 {% end %}

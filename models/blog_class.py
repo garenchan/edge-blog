@@ -88,8 +88,13 @@ class BlogClass(BASE, UUIDMixin, TimestampMixin):
     def insert_blog_class(db_session, **kwargs):
         name = kwargs.pop('name')
         description = kwargs.pop('description', '')
-        blog_class = BlogClass(name=name, description=description)
-        blog_class.order = BlogClass.get_max_order(db_session) + 1
-        db_session.add(blog_class)
-        db_session.commit()
-        return blog_class
+        try:
+            blog_class = BlogClass(name=name, description=description)
+            blog_class.order = BlogClass.get_max_order(db_session) + 1
+            db_session.add(blog_class)
+            db_session.commit()
+        except Exception:
+            db_session.rollback()
+            raise
+        else:
+            return blog_class

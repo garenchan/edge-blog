@@ -5,6 +5,12 @@
 <link href="{{ static_url('admin/pages/css/news.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ static_url('admin/pages/css/profile.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ static_url('admin/pages/css/tasks.css') }}" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+    .blog-page {
+        padding-right: 10px; 
+        padding-left: 0px;
+    }
+</style>
 {% end %}
 
 {% block page_header %}
@@ -13,86 +19,85 @@
 
 {% block content %}
 <div class="col-md-9 blog-page">
-<div class="portlet light">
-    <div class="portlet-body">
-        <div class="row">
-            <div class="col-md-12 blog-page">
-                <div class="row">
-                    <div class="col-md-9 col-sm-8 article-block">
-                        <!--<h1 style="margin-top:0px">最新博文</h1>-->
-                        {% for blog in blogs %}
-                        <div class="row">
-                            <div class="col-md-4 blog-img blog-tag-data">
-                                <ul class="list-inline">
-                                    <li>
-                                        <i class="fa fa-calendar"></i>
-                                        <a href="javascript:;">{{ blog.updated_at }} </a>
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-comments"></i>
-                                        <a href="javascript:;">阅读 {{ blog.view_counter }} </a>
-                                    </li>
-                                </ul>
-                                <ul class="list-inline blog-tags">
-                                    <li>
-                                        <i class="fa fa-ra"></i>
-                                        <a href="javascript:;">{{ blog.source.name }} </a>
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-tags"></i>
-                                        <a href="javascript:;">{{ blog.subclass.name }} </a>
-                                    </li>
-                                </ul>
+    <div class="portlet light">
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-8 article-block">
+                            <!--<h1 style="margin-top:0px">最新博文</h1>-->
+                            {% for blog in blogs %}
+                            <div class="row">
+                                <div class="col-md-4 blog-img blog-tag-data">
+                                    <ul class="list-inline">
+                                        <li>
+                                            <i class="fa fa-calendar"></i>
+                                            <a href="javascript:;">{{ blog.updated_at }} </a>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-comments"></i>
+                                            <a href="javascript:;">阅读 {{ blog.view_counter }} </a>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-inline blog-tags">
+                                        <li>
+                                            <i class="fa fa-ra"></i>
+                                            <a href="javascript:;">{{ blog.source.name }} </a>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-tags"></i>
+                                            <a href="javascript:;">{{ blog.subclass.name }} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-8 blog-article">
+                                    <h3>
+                                        <a href="{{ reverse_url('blog_reader', blog.id) }}">
+                                        {{ blog.title }} </a>
+                                    </h3>
+                                    <p>
+                                        {{ blog.summary }}
+                                    </p>
+                                    <!--<a class="btn blue" href="page_blog_item.html">
+                                        Read more <i class="m-icon-swapright m-icon-white"></i>
+                                    </a>-->
+                                </div>
                             </div>
-                            <div class="col-md-8 blog-article">
-                                <h3>
-                                    <a href="{{ reverse_url('blog_reader', blog.id) }}">
-                                    {{ blog.title }} </a>
-                                </h3>
-                                <p>
-                                    {{ blog.summary }}
-                                </p>
-                                <!--<a class="btn blue" href="page_blog_item.html">
-                                    Read more <i class="m-icon-swapright m-icon-white"></i>
-                                </a>-->
-                            </div>
+                            <hr>
+                            {% end %}
+                            {% if not len(blogs) %}
+                                Oops, 这个分类下还没有博文被发表喔！
+                            {% end %}
                         </div>
-                        <hr>
-                        {% end %}
-                        {% if not len(blogs) %}
-                            Oops, 这个分类下还没有博文被发表喔！
-                        {% end %}
                     </div>
+                    <ul class="pagination pull-right">
+                        <li>
+                            <a href="javascript:;">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        </li>
+                        {% for i in range(0, pages) %}
+                        <li>
+                            <a href="javascript:;">
+                                {{ i+1 }} 
+                            </a>
+                        </li>
+                        {% end %}
+                        <li>
+                            <a href="javascript:;">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="pagination pull-right">
-                    <li>
-                        <a href="javascript:;">
-                            <i class="fa fa-angle-left"></i>
-                        </a>
-                    </li>
-                    {% for i in range(0, pages) %}
-                    <li>
-                        <a href="javascript:;">
-                            {{ i+1 }} 
-                        </a>
-                    </li>
-                    {% end %}
-                    <li>
-                        <a href="javascript:;">
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
 </div>
-</div>
 
 <div class="col-md-3 col-sm-4 blog-sidebar">
-                        {% module NoticeBoard() %}
-                    </div>
-
+    {% module NoticeBoard() %}
+</div>
 {% end %}
 
 {% block extra_scripts %}

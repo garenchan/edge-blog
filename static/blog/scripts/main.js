@@ -46,3 +46,11 @@ function xsrf_token_header() {
         "X-Xsrftoken": xsrf_token(),
     }
 }
+
+function codeHighLight() {
+    if(typeof(hljs) != "undefined" ) {
+        $('pre code').each(function (i, block) {
+            hljs.highlightBlock(block);
+        });
+    }
+}
