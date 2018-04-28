@@ -155,3 +155,6 @@ local.properties
 .worksheet
 
 pylint.conf
+
+# pycharm
+.idea
